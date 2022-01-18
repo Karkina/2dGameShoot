@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="project_alpha" default="compile" basedir=".">
+  <description> The build file for the coffee break </description>
+  <property name="src" location="src"/>
+  <property name="build" location="beans"/>
+  <property environment="env" />
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+  <target name="compile" depends="clean,init" description="Compile the source">
+    <javac includeantruntime="false" debug="true" srcdir="${src}" excludes="" destdir="${build}">
+      <compilerarg line="--module-path ${env.JAVAFX} --add-modules javafx.controls,javafx.media"/>
+    </javac>
+  </target>
+  <target name="run" depends="compile" description="Run application">
+    <echo>================ Run Object Main ================</echo>
+    <java classname="alpha.Main" classpath="${build}/" fork="true">
+      <jvmarg line="--module-path ${env.JAVAFX} --add-modules javafx.controls,javafx.media"/>
+    </java>
+  </target>
+  <target name="dist" depends="init,clean" description="Archive">
+    <jar basedir="." jarfile="../project_alpha_${DSTAMP}.jar"/>
+  </target>
+  <target name="clean" description="Clean">
+    <echo>================ Removing temporary files... ================</echo>
+    <delete verbose="true">
+      <fileset dir="${basedir}" defaultexcludes="no">
+        <include name="**/*~"/>
+      </fileset>
+    </delete>
+    <echo>================ Removing build directory ================</echo>
+    <delete dir="${build}"/>
+  </target>
+</project>
